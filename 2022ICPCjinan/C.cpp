@@ -25,8 +25,7 @@ int dfs1(int u,int fa) {
 
 void dfs(int u, int fa) {
     vector<vector<int>>f(n + 10, vector<int>(n + 10, 0));
-    f[0][0] = 1;//f[i][siz]  选取i个节点，大小为siz的方案数
-    //计算全部儿子的背包
+    f[0][0] = 1;
     for (int v : g[u]) {
         if (v == fa)continue;
         for (int i = tot[u]; i>=1; i--) {
@@ -38,11 +37,8 @@ void dfs(int u, int fa) {
             }
         }
     }
-    // 计算除了v之外的儿子的背包
     for (int v : g[u]) {
         if (v == fa)continue;
-        //del   (1,siz[v])
-        //回退背包
         for (int i = 1; i <= tot[u]; i++) {
             for (int sz = siz[v]; sz <= siz[u]; sz++) {
                 f[i][sz] -= f[i - 1][sz - siz[v]];
@@ -57,7 +53,6 @@ void dfs(int u, int fa) {
                 g[k + 1] %= mod;
             }
         }
-        //转移dp[v]
         for (int i = 1; i <= n; i++) {
             for (int k = 1; k <= n; k++) {
                 if (i + k <= n) {
@@ -66,8 +61,6 @@ void dfs(int u, int fa) {
                 }
             }
         }
-
-        //再加回来
         for (int i = tot[u]; i >= 1; i--) {
             for (int sz = siz[u]; sz >= siz[v]; sz--) {
                 f[i][sz] += f[i - 1][sz - siz[v]];
@@ -75,7 +68,6 @@ void dfs(int u, int fa) {
             }
         }
     }
-    //不要忘记dfs
     for (int v : g[u]) {
         if (v == fa)continue;
         dfs(v, u);
